@@ -5,14 +5,20 @@
                 <vs-col vs-w="2">
                     <vs-avatar size="50px" :src="match.champion"/>
                 </vs-col>
-                <vs-col vs-w="4">
-                    {{ match.queue.map + ' ' + match.queue.description}}
-                    <button @click="seeMatch(match.gameId)">da</button>
+                <vs-col vs-w="5" vs-xs="10" class="queue-col">
+                    <h5>{{ match.queue.map }}</h5>
+                    <p>{{match.queue.description}}</p>
                 </vs-col>
-                <vs-col>
-                    {{ match.time }}
+                <vs-col vs-w="5" vs-xs="12" class="details-col">
+                    <vs-button color="success" type="gradient" @click="seeMatch(match.gameId)">
+                        See game details
+                    </vs-button>
                 </vs-col>
             </vs-row>
+
+            <vs-divider position="left" class="m-0">
+                {{ match.time }}
+            </vs-divider>
         </vs-card>
     </section>
 </template>
@@ -50,5 +56,30 @@
     }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+    .queue-col {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+
+    .details-col {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .queue-col p {
+        margin-bottom: 0.5rem;
+    }
+
+    .vs-button:focus {
+        outline: 0;
+    }
+
+    @media (max-width: 678px) {
+        .queue-col {
+            align-items: center;
+        }
+    }
 </style>

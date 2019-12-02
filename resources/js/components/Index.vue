@@ -79,4 +79,12 @@
     .search-button {
         margin-top: 17px;
     }
+
+    @media (max-width: 678px) {
+        .card {
+            flex-direction: column;
+            height: auto;
+            align-items: center;
+        }
+    }
 </style>

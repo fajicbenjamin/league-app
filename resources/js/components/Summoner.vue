@@ -1,7 +1,7 @@
 <template>
     <div>
         <vs-row>
-            <vs-col type="flex" vs-justify="center" vs-align="center" vs-w="4">
+            <vs-col type="flex" vs-justify="center" vs-align="center" vs-w="4" vs-xs="12">
                 <vs-card class="cardx text-center profile-card">
                     <div slot="header">
                         <h3>
@@ -19,6 +19,7 @@
                             League
                         </vs-divider>
                         <h5>{{ summoner.league[0].tier + ' ' + summoner.league[0].rank }}</h5>
+                        <p>LP: {{ summoner.league[0].leaguePoints }}</p>
                         <img class="ranked-emblem" :src="`/images/${summoner.league[0].tier}.png`" alt="">
                         <p>W {{ summoner.league[0].wins }} L {{summoner.league[0].losses }}</p>
                     </div>
@@ -30,7 +31,7 @@
                 </vs-card>
             </vs-col>
 
-            <vs-col type="flex" vs-justify="center" vs-align="center" vs-w="6">
+            <vs-col type="flex" vs-justify="center" vs-align="center" vs-w="6" vs-xs="12">
                 <match-list class="matches-card" :matches="matches"></match-list>
             </vs-col>
         </vs-row>
@@ -76,5 +77,14 @@
 
     .ranked-emblem {
         width: 70px;
+    }
+
+    @media (max-width: 678px) {
+        .profile-card {
+            width: calc(100% - 40px);
+        }
+        .matches-card {
+            width: calc(100% - 40px);
+        }
     }
 </style>

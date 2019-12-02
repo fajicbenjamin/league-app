@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 
 use App\Http\RiotApi;
+use App\Http\RiotConstants;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
@@ -35,8 +36,8 @@ class LeagueController extends Controller
 
     private function getMatchList($summoner) {
 
-        //$matches = Cache::get($summoner->name);
-        $matches = null;
+        $matches = Cache::get($summoner->name);
+//        $matches = null;
 
         if (!$matches) {
             $matchList = RiotApi::matchListByAccountId($summoner->accountId, [
@@ -49,11 +50,11 @@ class LeagueController extends Controller
                         'gameId' => $match->gameId,
                         'champion' => getChampionIcon(getChampion($match->champion)),
                         'queue' => leagueQueue($match->queue),
-                        'time' => fromUnixTimestamp($match->timestamp)->diffForHumans()
+                        'time' => fromUnixTimestamp($match->timestamp)->diffForHumans(),
                     ];
                 })->toArray();
 
-            //Cache::put($summoner->name, $matches, Carbon::now()->addMinutes(60));
+            Cache::put($summoner->name, $matches, Carbon::now()->addMinutes(60));
         }
 
         return $matches;
@@ -135,8 +136,16 @@ class LeagueController extends Controller
     public function match(string $region, string $summonerName, string $gameId) {
         RiotApi::initialize(getRegionHost($region));
 
-        $match = RiotApi::match($gameId);
+        $match = Cache::get($gameId);
 
-        dd($this->game($match, RiotApi::summonerByName($summonerName)));
+        if (!$match) {
+            $match = RiotApi::match($gameId);
+
+            $match = $this->game($match, RiotApi::summonerByName($summonerName));
+        }
+
+        dd($match);
+
+        Cache::put($gameId, $match, Carbon::now()->addMinutes(60));
     }
 }
